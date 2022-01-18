@@ -7,20 +7,23 @@ class DiscordHelper:
     database = db.DatabaseManager()
     def isValidCommand(self, command):
         commands = [
-            "!SNB-add-user",
-            "!SNB-set-notifications-channel"
+            "!TM-add-user",
+            "!TM-set-notifications-channel",
+            "!TM-help"
         ]
         if command in commands:
             return True
         return False
         
     async def executeCommand(self, command, message, author, channel):
-        if command == "!SNB-add-user":
+        if command == "!TM-add-user":
             self.database.addUser(message, author)
-            await channel.send("Successfully added user to SNB")
-        elif command == "!SNB-set-notifications-channel":
+            await channel.send("Successfully added user to TM")
+        elif command == "!TM-set-notifications-channel":
             self.database.setNotificationsChannel(message, author)
             await channel.send("Successfully set notifications channel to " + message)
+        elif command == "!TM-help":
+            await channel.send("!TM-add-user [TWITCH_USERNAME]\n!TM-set-notifications-channel [CHANNEL_FOR_NOTIFICATIONS]")
 
     
     def isAuthorized(self, author):
@@ -28,7 +31,7 @@ class DiscordHelper:
             return True
         return False
     
-    async def broadcastStreamerWentOnline(self, user_login):
+    async def broadcastStreamerWentOnline(self, user_login, data):
         load_dotenv('../.env')
         intents=discord.Intents.default()
         client=discord.Client(intents=intents)
@@ -48,7 +51,11 @@ class DiscordHelper:
             channels = await guildData.fetch_channels()
             for channel in channels:
                 if channel.id == channelID:
-                    await channel.send("@everyone " + user_login + " went online!\nhttp://www.twitch.tv/" + user_login)
+                    messageString = "@everyone\n"
+                    messageString += user_login + " is playing " + data['game_name'] +"\n"
+                    messageString += "Stream title: " + data['title'] + "\n"
+                    messageString += "Come watch at http://www.twitch.tv/" + user_login 
+                    await channel.send(messageString)
                     break
             break
         await client.close()

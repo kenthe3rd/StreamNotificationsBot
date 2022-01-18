@@ -17,10 +17,11 @@ class Controller:
             row = cursor.fetchone()
             if row == None:
                 break
-            currentlyOnline = twitch.userOnline(row[0])
+            streamData = twitch.getStream(row[0])
             onlineInDB = row[1]
-            if currentlyOnline == True and onlineInDB == False:
-                await discord.broadcastStreamerWentOnline(row[0])
+            if streamData['data'] != [] and onlineInDB == False:
+                #print(streamData['data'][0])
+                await discord.broadcastStreamerWentOnline(row[0], streamData['data'][0])
                 database.setStreamerOnline(row[0], 1)
-            elif currentlyOnline == False and onlineInDB == True:
+            elif streamData['data'] == [] and onlineInDB == True:
                 database.setStreamerOnline(row[0], 0)

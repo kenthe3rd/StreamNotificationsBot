@@ -18,7 +18,8 @@ async def on_message(message):
     substr = str(message.content)
     cmdIDX = substr.find(" ")
     if cmdIDX == -1:
-        return
+        command = substr
+        argument = ""
     else:
         command = substr[0:cmdIDX]
         argument = substr[cmdIDX+1:]

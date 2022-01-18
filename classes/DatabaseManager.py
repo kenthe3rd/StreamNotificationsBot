@@ -69,7 +69,7 @@ class DatabaseManager:
         cursor.execute(query, params)
         row = cursor.fetchone()
         if row == None:
-            query = "INSERT INTO servers_streamers (server, streamer) VALUES (?,?);"
+            query = "INSERT INTO servers_streamers (streamer, server) VALUES (?,?);"
             cursor.execute(query, params)
         conn.commit()
         conn.close()
