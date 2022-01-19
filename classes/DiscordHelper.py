@@ -51,7 +51,7 @@ class DiscordHelper:
             channels = await guildData.fetch_channels()
             for channel in channels:
                 if channel.id == channelID:
-                    messageString = "@everyone\n"
+                    messageString = "@here\n"
                     messageString += user_login + " is playing " + data['game_name'] +"\n"
                     messageString += "Stream title: " + data['title'] + "\n"
                     messageString += "Come watch at http://www.twitch.tv/" + user_login 
