@@ -8,12 +8,12 @@ class Controller:
         database = db.DatabaseManager()
         twitch = th.TwitchHelper()
         discord = dh.DiscordHelper()
+        conn = database.getConnection()
+        cursor = conn.cursor()
+        query = "SELECT user_login, online FROM streamers;"
+        params = []
+        cursor.execute(query, params)
         while(True):
-            conn = database.getConnection()
-            cursor = conn.cursor()
-            query = "SELECT user_login, online FROM streamers;"
-            params = []
-            cursor.execute(query, params)
             row = cursor.fetchone()
             if row == None:
                 cursor.close()
