@@ -14,6 +14,7 @@ class Controller:
         params = []
         cursor.execute(query, params)
         conn.commit()
+        cursor.close()
         while(True):
             row = cursor.fetchone()
             if row == None:

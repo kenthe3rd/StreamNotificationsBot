@@ -21,6 +21,7 @@ class DatabaseManager:
         cursor = conn.cursor()
         cursor.execute(query, params)
         conn.commit()
+        cursor.close()
         conn.close()
         
     def getConnection(self):
@@ -32,6 +33,7 @@ class DatabaseManager:
         params = [server.id]
         cursor = conn.execute(query, params)
         row = cursor.fetchone()
+        cursor.close()
         conn.close()
         if row != None:
             return True
@@ -45,6 +47,7 @@ class DatabaseManager:
         cursor = conn.cursor()
         cursor.execute(query, params)
         row = cursor.fetchone()
+        cursor.close()
         conn.close()
         if row != None:
             return True
@@ -72,6 +75,7 @@ class DatabaseManager:
             query = "INSERT INTO servers_streamers (streamer, server) VALUES (?,?);"
             cursor.execute(query, params)
         conn.commit()
+        cursor.close()
         conn.close()
         
     def setNotificationsChannel(self, channelName, author):
@@ -95,7 +99,8 @@ class DatabaseManager:
             row = cursor.fetchone()
             if row == None:
                 break
-            output[row[1]] = row            
+            output[row[1]] = row
+        cursor.close()        
         conn.close()
         return output
     
