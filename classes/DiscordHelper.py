@@ -45,6 +45,8 @@ class DiscordHelper:
         while(True):
             row = cursor.fetchone()
             if row == None:
+                cursor.close()
+                conn.close()
                 break
             channelID = row[1]
             guildData = await client.fetch_guild(row[0])
@@ -57,8 +59,8 @@ class DiscordHelper:
                     messageString += "Come watch at http://www.twitch.tv/" + user_login 
                     await channel.send(messageString)
                     break
+            cursor.close()
+            conn.close()
             break
-        cursor.close()
-        conn.close()
         await client.close()
             

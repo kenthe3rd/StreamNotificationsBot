@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import time
 
 class DatabaseManager:
     def addUser(self, twitchUser, author):
@@ -17,10 +18,18 @@ class DatabaseManager:
         self.executeQuery(query, params)
         
     def executeQuery(self, query, params):
+        MAX_RETRIES = 10
+        retries = 0
         conn = self.getConnection()
         cursor = conn.cursor()
-        cursor.execute(query, params)
-        conn.commit()
+        while retries < MAX_RETRIES:
+            try:
+                cursor.execute(query, params)
+                conn.commit()
+                break
+            except:
+                time.sleep(0.5)
+                retries += 1
         cursor.close()
         conn.close()
         
