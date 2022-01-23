@@ -25,7 +25,7 @@ class DatabaseManager:
         conn.close()
         
     def getConnection(self):
-        return sqlite3.connect(database=os.getenv('PATH_TO_SQLITE_DB'))
+        return sqlite3.connect(database=os.getenv('PATH_TO_SQLITE_DB'), timeout=10)
     
     def serverInDB(self, server):
         conn = self.getConnection()
