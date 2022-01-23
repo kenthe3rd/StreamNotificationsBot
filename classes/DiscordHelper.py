@@ -58,6 +58,6 @@ class DiscordHelper:
                     await channel.send(messageString)
                     break
             break
-        await client.close()
         conn.close()
+        await client.close()
             

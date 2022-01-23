@@ -13,6 +13,7 @@ class Controller:
         query = "SELECT user_login, online FROM streamers;"
         params = []
         cursor.execute(query, params)
+        conn.commit()
         while(True):
             row = cursor.fetchone()
             if row == None:
