@@ -13,17 +13,20 @@ class Controller:
         query = "SELECT user_login, online FROM streamers;"
         params = []
         cursor.execute(query, params)
+        data = {}
         while(True):
             row = cursor.fetchone()
             if row == None:
                 cursor.close()
                 conn.close()
                 break
-            streamData = twitch.getStream(row[0])
-            onlineInDB = row[1]
+            data[row[0]] = row[1]
+        for user_login in data:
+            streamData = twitch.getStream(user_login)
+            onlineInDB = data[user_login]
             if streamData['data'] != [] and onlineInDB == False:
                 #print(streamData['data'][0])
-                await discord.broadcastStreamerWentOnline(row[0], streamData['data'][0])
-                database.setStreamerOnline(row[0], 1)
+                await discord.broadcastStreamerWentOnline(user_login, streamData['data'][0])
+                database.setStreamerOnline(user_login, 1)
             elif streamData['data'] == [] and onlineInDB == True:
-                database.setStreamerOnline(row[0], 0)
+                database.setStreamerOnline(user_login, 0)
