@@ -8,15 +8,16 @@ class Controller:
         database = db.DatabaseManager()
         twitch = th.TwitchHelper()
         discord = dh.DiscordHelper()
-        conn = database.getConnection()
-        cursor = conn.cursor()
-        query = "SELECT user_login, online FROM streamers;"
-        params = []
-        cursor.execute(query, params)
         while(True):
+            conn = database.getConnection()
+            cursor = conn.cursor()
+            query = "SELECT user_login, online FROM streamers;"
+            params = []
+            cursor.execute(query, params)
             row = cursor.fetchone()
-            cursor.close()
             if row == None:
+                cursor.close()
+                conn.close()
                 break
             streamData = twitch.getStream(row[0])
             onlineInDB = row[1]
@@ -24,7 +25,5 @@ class Controller:
                 #print(streamData['data'][0])
                 await discord.broadcastStreamerWentOnline(row[0], streamData['data'][0])
                 database.setStreamerOnline(row[0], 1)
-                conn.close()
             elif streamData['data'] == [] and onlineInDB == True:
                 database.setStreamerOnline(row[0], 0)
-                conn.close()
