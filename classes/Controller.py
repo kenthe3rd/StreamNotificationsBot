@@ -13,7 +13,6 @@ class Controller:
         query = "SELECT user_login, online FROM streamers;"
         params = []
         cursor.execute(query, params)
-        conn.close()
         while(True):
             row = cursor.fetchone()
             if row == None:
@@ -24,5 +23,7 @@ class Controller:
                 #print(streamData['data'][0])
                 await discord.broadcastStreamerWentOnline(row[0], streamData['data'][0])
                 database.setStreamerOnline(row[0], 1)
+                conn.close()
             elif streamData['data'] == [] and onlineInDB == True:
                 database.setStreamerOnline(row[0], 0)
+                conn.close()
