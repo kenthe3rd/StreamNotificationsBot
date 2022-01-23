@@ -30,6 +30,8 @@ class DatabaseManager:
             except:
                 time.sleep(0.5)
                 retries += 1
+                if retries == MAX_RETRIES:
+                    print("Failed to execute query too many times, aborting: " + query)
         cursor.close()
         conn.close()
         
