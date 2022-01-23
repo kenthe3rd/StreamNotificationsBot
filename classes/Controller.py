@@ -13,10 +13,9 @@ class Controller:
         query = "SELECT user_login, online FROM streamers;"
         params = []
         cursor.execute(query, params)
-        conn.commit()
-        cursor.close()
         while(True):
             row = cursor.fetchone()
+            cursor.close()
             if row == None:
                 break
             streamData = twitch.getStream(row[0])
